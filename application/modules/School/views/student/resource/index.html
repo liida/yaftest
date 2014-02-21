@@ -1,0 +1,84 @@
+{{include "public/header.html"}}
+<div class="pad_common">
+<div class="subnav">
+    <div class="content-menu ib-a link line-x">
+        <a class="add fb" href="javascript:add();"><em>添加学生资源</em></a>    
+    </div>
+</div>
+<form method="get" action="" name="searchform">
+	<table width="100%" cellspacing="0" class="search-form">
+	    <tbody>
+			<tr>
+			<td>
+			<div class="explain-col">
+			<input type="text" name="studentName" class="input-text ufocus" id="studentName" value="{{$_GET.studentName}}" def="学生名">
+			{{Html::selectGender($_GET.gender, 'gender', 'gender','性别')}}
+			{{Html::selectStudentResource($_GET.source, 'source', 'source','来源')}}
+			<input type="submit" value="搜索" class="button search" name="search">
+			</td>
+			</tr>
+	    </tbody>
+	</table>
+</form>
+
+<div class="table-list">
+<table width="100%" cellspacing="0">
+	<thead>
+		<tr>
+			<th align="left">学生名</th>
+			<th align="left">性别</th>
+			<th align="left">来源</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+<tbody>
+{{foreach $students as $student}}
+    <tr>
+		<td align="left">{{$student.name}}</a></td>
+		<td align="left">{{if $student.gender == 1}}男{{elseif $student.gender == 2}}女{{else}}未知{{/if}}</td>
+		<td align="left">{{if $student.source == 0}}招生{{elseif $student.source == 1}}活动{{elseif $student.source == 2}}其他{{else}}未知{{/if}}</td>
+		<td align="center">	
+			<a href="javascript:doit({{$student.id}},'{{$student.name}}')">[转正]</a>
+			<a href="javascript:edit({{$student.id}},'{{$student.name}}')">[修改]</a>
+			<a href="javascript:confirmurl('/school/student_resource/delete?id={{$student.id}}', '是否删除?')">[删除]</a>
+		</td>
+    </tr>
+{{foreachelse}}
+<tr><td colspan=4>暂无学生资源</td></tr>
+{{/foreach}}
+</tbody>
+</table>
+</div>
+<div id="pages">{{$pages}}</div>
+</div>
+<script language="JavaScript">
+<!--
+function add(){
+	window.top.art.dialog({
+		id:'add',
+		iframe:'/school/student_resource/add', 
+		title:'添加学生资源', 
+		width:'580', 
+		height:'500',
+		lock:true
+	});
+}
+
+function edit(id,name){
+	window.top.art.dialog({
+		id:'edit',
+		iframe:'/school/student_resource/edit?id='+id, 
+		title:'修改学生资源《'+name+'》', 
+		width:'700', 
+		height:'500', 
+		lock:true
+	});
+}
+
+function doit(id,name){
+	alert('转正学生《'+name+'》')
+	
+}
+//-->
+</script>
+{{include "public/footer.html"}}
